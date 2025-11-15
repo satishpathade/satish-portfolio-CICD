@@ -26,10 +26,11 @@ pipeline {
                         ssh -o StrictHostKeyChecking=no ${REMOTE_USER}@${SERVER_IP} "sudo apt update && sudo apt install apache2 -y && sudo systemctl restart apache2"
 
                         echo "Uploading new files to /tmp on server..."
-                        scp -r index.html css js fonts images ${REMOTE_USER}@${SERVER_IP}:/tmp/
+                        scp -o StrictHostKeyChecking=no -r index.html style.css app.js img README.md ${REMOTE_USER}@${SERVER_IP}:/tmp/
 
                         echo "Deploying files to Apache directory..."
-                        ssh -o StrictHostKeyChecking=no ${REMOTE_USER}@${SERVER_IP} "sudo cp -r /tmp/index.html /tmp/css /tmp/js /tmp/fonts /tmp/images ${WEB_DIR}/"
+                        ssh -o StrictHostKeyChecking=no ${REMOTE_USER}@${SERVER_IP} "sudo cp -r /tmp/index.html /tmp/style.css /tmp/app.js /tmp/img /tmp/README.md ${WEB_DIR}/"
+
                     '''
                 }
             }
