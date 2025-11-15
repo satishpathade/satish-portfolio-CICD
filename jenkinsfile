@@ -6,7 +6,6 @@ pipeline {
         SERVER_IP = '65.1.112.108'          // Your Deploy EC2 IP
         REMOTE_USER = 'ubuntu'
         WEB_DIR = '/var/www/html'
-        WEB_DIR = '/var/www/html/'
     }
 
     stages {
@@ -23,8 +22,8 @@ pipeline {
                         echo "Cleaning old files on server..."
                         ssh -o StrictHostKeyChecking=no ${REMOTE_USER}@${SERVER_IP} "sudo rm -rf ${WEB_DIR}/*"
 
-                        sudo apt install apache2 -y
-                        sudo service apache2 start
+                        echo "---- Installing Apache on server ----"
+                        ssh -o StrictHostKeyChecking=no ${REMOTE_USER}@${SERVER_IP} "sudo apt update && sudo apt install apache2 -y && sudo systemctl restart apache2"
 
                         echo "Uploading new files to /tmp on server..."
                         scp -r index.html css js fonts images ${REMOTE_USER}@${SERVER_IP}:/tmp/
